@@ -30,18 +30,28 @@ p ~ p {
   height: calc(100vh - var(--gap));
   grid-gap: var(--gap);
   display: grid;
-  grid-template-rows: [es] 50% [en] 50%;
+  grid-template-rows: repeat(var(--panes), 1fr);
 }
 
 @media (orientation: landscape) {
   .split-view {
     grid-template-rows: unset;
-    grid-template-columns: [es] 50% [en] 50%;
+    grid-template-columns: repeat(var(--panes), 1fr);
     height: 100vh;
     width: calc(100vw - var(--gap));
   }
 }
 
+@media (orientation: portrait) {
+  .align {
+    display: none;
+  }
+}
+
 .split-view > div {
   overflow-y: auto;
+}
+
+.split-view > div:not(:last-of-type)::-webkit-scrollbar {
+  display: none;
 }

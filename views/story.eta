@@ -9,7 +9,7 @@
     <script async type="module" src="/static/main.js"></script>
   </head>
   <body>
-    <div class="split-view">
+    <div class="split-view" style="--panes: <%= it.langs.length %>">
       <% it.langs.forEach(lang => { %>
         <div lang="<%= lang %>">
           <%~ E.includeFile(`../content/alice/c1_${lang}.html`, {}) %>
