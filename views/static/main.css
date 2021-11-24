@@ -1,6 +1,6 @@
 :root {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   text-rendering: optimizelegibility;
 }
 
@@ -15,20 +15,20 @@ h1 {
 }
 
 p {
-  line-height: 1.56em;
+  line-height: 1.56;
 }
 
-p ~ p {
+p ~ p, .split-view > div > div > p:first-of-type {
   margin-top: .8em;
 }
 
+.split-view > div > p, .split-view > div > div > p:first-child {
+  text-indent: 1.5ch;
+}
 
 .split-view {
   width: 100vw;
-  height: 100vh;
   --gap: 1rem;
-  height: calc(100vh - var(--gap));
-  grid-gap: var(--gap);
   display: grid;
   grid-template-rows: repeat(var(--panes), 1fr);
 }
@@ -37,12 +37,32 @@ p ~ p {
   .split-view {
     grid-template-rows: unset;
     grid-template-columns: repeat(var(--panes), 1fr);
-    height: 100vh;
-    width: calc(100vw - var(--gap));
+    --gap: max(3rem, 4vw);
+    grid-gap: 0 var(--gap);
+    padding: var(--gap);
+
+    --max-line: 45ch;
+    max-width: calc((var(--panes) + 1) * var(--gap) + var(--panes) * var(--max-line));
+    margin: auto;
+  }
+
+  .split-view > div {
+    display: contents;
+  }
+
+  .split-view > div > * {
+    grid-column: var(--column);
+    grid-row: var(--row);
   }
 }
 
 @media (orientation: portrait) {
+  .split-view {
+    padding: 0 2rem;
+    grid-gap: var(--gap) 0;
+    height: calc(100vh - var(--gap));
+  }
+
   .align {
     display: none;
   }

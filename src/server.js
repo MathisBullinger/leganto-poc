@@ -15,7 +15,7 @@ app.use('/static', express.static('views/static'))
 app.get('/:story/*', (req, res) => {
   res.render('story', {
     title: req.params.story,
-    langs: req.params[0].split('/'),
+    langs: req.params[0].replace(/\/$/, '').split('/'),
   })
 })
 
