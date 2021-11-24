@@ -1,0 +1,47 @@
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  text-rendering: optimizelegibility;
+}
+
+body {
+  overscroll-behavior: none;
+  margin: 0;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: .5em;
+}
+
+p {
+  line-height: 1.56em;
+}
+
+p ~ p {
+  margin-top: .8em;
+}
+
+
+.split-view {
+  width: 100vw;
+  height: 100vh;
+  --gap: 1rem;
+  height: calc(100vh - var(--gap));
+  grid-gap: var(--gap);
+  display: grid;
+  grid-template-rows: [es] 50% [en] 50%;
+}
+
+@media (orientation: landscape) {
+  .split-view {
+    grid-template-rows: unset;
+    grid-template-columns: [es] 50% [en] 50%;
+    height: 100vh;
+    width: calc(100vw - var(--gap));
+  }
+}
+
+.split-view > div {
+  overflow-y: auto;
+}
