@@ -96,3 +96,8 @@ p ~ p, .split-view > div > div > p:first-of-type {
   background: hsl(40, 100%, 80%);
 }
 
+
+.char:hover {
+  border-right: 1px solid #f00;
+  margin-right: -1px;
+}

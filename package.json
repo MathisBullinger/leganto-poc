@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node scripts/compile.js && node scripts/build.js && cp -r views/static build",
-    "dev": "npm run build && (trap 'kill 0' SIGINT; onchange 'content/**/*.txt' -- node scripts/compile.js & onchange 'content/**/*.html' -- node scripts/build.js & onchange 'views/static/*' -- cp -r views/static build & python3 -m http.server --directory build)"
+    "dev": "npm run build && (trap 'kill 0' SIGINT; onchange 'content/**/*.txt' -- node scripts/compile.js & onchange 'content/**/*.html' -- node scripts/build.js & onchange 'views/static/*' -- cp -r views/static build & python3 -m http.server --directory build & node scripts/segmenter.js)"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +14,8 @@
     "eta": "^1.12.3"
   },
   "devDependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
     "onchange": "^7.1.0"
   }
 }
