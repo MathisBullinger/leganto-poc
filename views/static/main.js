@@ -1,4 +1,4 @@
-const panes = [...document.querySelectorAll('.split-view > div')]
+const panes = [...document.querySelectorAll('.split-view > article')]
 
 let lastPos = Array(panes.length).fill(0)
 const height = new Map(panes.map((v) => [v, v.scrollHeight - v.offsetHeight]))

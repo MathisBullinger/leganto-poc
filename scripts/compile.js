@@ -19,15 +19,20 @@ function compile(file) {
     .replace(/_([^_]+)_/g, (_, v) => `<i>${v}</i>`)
     .split('\n\n\n')
     .map((row) =>
-      row.split('\n\n').map(
-        (v) =>
-          `<p>${v
-            .split('|')
-            .map((v) => `<span>${v}</span>`)
-            .join('')}</p>`
-      )
+      row.split('\n\n').map((v) => {
+        const tag = v.startsWith('#') ? 'h1' : 'p'
+        return `<${tag}>${v
+          .replace(/^#\s*/, '')
+          .split('|')
+          .map((v) => `<span>${v}</span>`)
+          .join('')}</${tag}>`
+      })
     )
-    .map((v) => (v.length > 1 ? `<div>${v.join('')}</div>` : v[0]))
+    .map((v) => {
+      if (v.length <= 1) return v[0]
+      const tag = v[0].startsWith('<h1') ? 'header' : 'div'
+      return `<${tag}>${v.join('')}</${tag}>`
+    })
     .map((v, i) => v.replace(/>/, ` style="--row: ${i + 1}">`))
     .join('')
 

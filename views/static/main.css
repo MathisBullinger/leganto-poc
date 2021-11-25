@@ -3,6 +3,7 @@
   font-size: 18px;
   text-rendering: optimizelegibility;
   --cl-text: #292929;
+  --cl-accent: hsl(40, 100%, 80%);
 }
 
 body {
@@ -12,7 +13,18 @@ body {
 
 h1 {
   font-size: 1.5rem;
-  margin-bottom: .5em;
+  margin-bottom: 1.2rem;
+}
+
+h1 + p {
+  letter-spacing: .03em;
+  word-spacing: .15em;
+  text-transform: uppercase;
+}
+
+header {
+  margin-bottom: 3rem;
+  text-align: center;
 }
 
 p {
@@ -26,11 +38,7 @@ i {
   pointer-events: none;
 }
 
-p ~ p, .split-view > div > div > p:first-of-type {
-  margin-top: .8em;
-}
-
-.split-view > div > p, .split-view > div > div > p:first-child {
+.split-view > article > p, .split-view > article > div > p:first-child {
   text-indent: 1.5ch;
 }
 
@@ -49,19 +57,24 @@ p ~ p, .split-view > div > div > p:first-of-type {
     grid-template-rows: unset;
     grid-template-columns: repeat(var(--panes), fit-content(var(--max-line)));
     grid-gap: 0 var(--gap);
-    padding: 2rem 0;
+    padding-top: 4rem;
+    padding-bottom: 2rem;
     width: max-content;
-    max-width: 100vw;
+    max-width: calc(100vw - 2 * var(--gap));
     margin: auto;
   }
 
-  .split-view > div {
+  .split-view > article {
     display: contents;
   }
 
-  .split-view > div > * {
+  .split-view > article > * {
     grid-column: var(--column);
     grid-row: var(--row);
+  }
+
+  p ~ p, .split-view > article > div > p:first-of-type {
+    margin-top: .8em;
   }
 }
 
@@ -73,7 +86,7 @@ p ~ p, .split-view > div > div > p:first-of-type {
     height: 100vh;
   }
 
-  .split-view > div {
+  .split-view > article {
     padding: 1rem;
     background-color: #fff;
   }
@@ -81,20 +94,27 @@ p ~ p, .split-view > div > div > p:first-of-type {
   .align {
     display: none;
   }
+
+  .split-view > article::-webkit-scrollbar {
+    display: none;
+  }
+
+  p {
+    line-height: 1.56;
+  }
+
+  header {
+    margin-bottom: 1.2rem;
+  }
 }
 
-.split-view > div {
+.split-view > article {
   overflow-y: auto;
 }
 
-.split-view > div:not(:last-of-type)::-webkit-scrollbar {
-  display: none;
-}
-
 [data-seg].active {
-  background: hsl(40, 100%, 80%);
+  background: var(--cl-accent);
 }
-
 
 .char:hover {
   border-right: 1px solid #f00;
