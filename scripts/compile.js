@@ -3,7 +3,7 @@ const path = require('path')
 
 search().forEach(compile)
 
-function search(dir = '.') {
+function search(dir = path.resolve(__dirname, '../content')) {
   return fs.readdirSync(dir).flatMap((v) => {
     const p = path.join(dir, v)
     if (fs.lstatSync(p).isDirectory()) return search(p)

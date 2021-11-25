@@ -12,7 +12,7 @@
     <div class="split-view" style="--panes: <%= it.langs.length %>">
       <% it.langs.forEach((lang, i) => { %>
         <div lang="<%= lang %>" style="--column: <%= i+1 %>">
-          <%~ E.includeFile(`../content/alice/c1_${lang}.html`, {}) %>
+          <%~ E.includeFile(`../content/${it.path}${lang}.html`, {}) %>
         </div>
       <% }) %>
     </div>
