@@ -1,17 +1,16 @@
-let colors = []
-
-for (let i = 0; i < 50; i++) {
-  let last = colors[colors.length - 1] || Array(3).fill(0x00)
-  let color
-  do {
-    color = Array(3)
-      .fill()
-      .map((v) => Math.floor(0xff - Math.random() * 0x55))
-  } while (color.reduce((a, c, i) => a + Math.abs(c - last[i]), 0) < 0x22)
-  colors.push(color)
-}
-colors = colors.map(
-  (cl) => '#' + cl.map((v) => ('00' + v.toString(16)).slice(-2)).join('')
+const colors = [...Array(50)].map(
+  (_, i) =>
+    '#' +
+    [...Array(3)]
+      .map((__, e) =>
+        (
+          '00' +
+          Math.floor(
+            0xff - ((e * 0x22 + i * ((e + 1) / 4) * 123) % 0x44)
+          ).toString(16)
+        ).slice(-2)
+      )
+      .join('')
 )
 
 colorSegments()
@@ -46,7 +45,7 @@ for (const lang of document.querySelectorAll('.split-view > div')) {
         segment: target.parentNode.textContent,
         index: [...target.parentNode.childNodes].indexOf(target),
       }),
-    })
+    }).then(() => setTimeout(() => location.reload(), 3500))
   })
 }
 
