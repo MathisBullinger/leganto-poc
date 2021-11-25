@@ -33,26 +33,14 @@ stories.forEach(async (id) => {
 
   for (const [chapter, langSet] of chapterLangs) {
     for (const langs of permutate(langSet)) {
-      // console.log(langs)
       let pre = `${id}/${chapter}`
-      // if (chapter) path += chapter + '_'
-      // console.log(path)
       const out = await compile(id, pre, langs)
-      // console.log(out)
       const dir = path.join(outDir, ...langs, id, chapter.replace(/_$/, ''))
       fs.mkdirSync(dir, { recursive: true })
       fs.writeFileSync(path.join(dir, 'index.html'), out)
     }
   }
 })
-
-// console.log(
-//   eta.renderFile('story.eta', {
-//     title: 'Alice in Wonderland',
-//     path: 'alice/c1_',
-//     langs: ['en'],
-//   })
-// )
 
 async function compile(title, path, langs) {
   return await eta.renderFile('story.eta', { title, path, langs })
