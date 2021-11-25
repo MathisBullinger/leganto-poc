@@ -1,8 +1,8 @@
 :root {
-  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif; */
   font-family: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman, Droid Serif, Times, Source Serif Pro, serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   font-size: 18px;
   text-rendering: optimizelegibility;
+  --cl-text: #292929;
 }
 
 body {
@@ -18,7 +18,7 @@ h1 {
 p {
   line-height: 1.38;
   cursor: text;
-  color: #292929;
+  color: var(--cl-text);
 }
 
 i {
@@ -43,14 +43,15 @@ p ~ p, .split-view > div > div > p:first-of-type {
 
 @media (orientation: landscape) {
   .split-view {
-    grid-template-rows: unset;
-    grid-template-columns: repeat(var(--panes), 1fr);
-    --gap: max(3rem, 4vw);
-    grid-gap: 0 var(--gap);
-    padding: var(--gap);
-
     --max-line: 45ch;
-    max-width: calc((var(--panes) + 1) * var(--gap) + var(--panes) * var(--max-line));
+    --gap: clamp(1.5rem, calc((100vw - var(--panes) * var(--max-line)) / (var(--panes) + 1)), calc(var(--max-line) / 3));
+
+    grid-template-rows: unset;
+    grid-template-columns: repeat(var(--panes), fit-content(var(--max-line)));
+    grid-gap: 0 var(--gap);
+    padding: 2rem 0;
+    width: max-content;
+    max-width: 100vw;
     margin: auto;
   }
 
@@ -66,21 +67,19 @@ p ~ p, .split-view > div > div > p:first-of-type {
 
 @media (orientation: portrait) {
   .split-view {
-    padding: 0 2rem;
-    grid-gap: var(--gap) 0;
-    height: calc(100vh - var(--gap));
+    padding: 0;
+    grid-gap: 2px 0;
+    background-color: var(--cl-text);
+    height: 100vh;
+  }
+
+  .split-view > div {
+    padding: 1rem;
+    background-color: #fff;
   }
 
   .align {
     display: none;
-  }
-
-  :root {
-    font-size: 22px;
-  }
-
-  p {
-  line-height: 1.56;
   }
 }
 
