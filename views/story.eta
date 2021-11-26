@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= it.title %></title>
+    <title><%= it.title[it.langs[0]][1] || it.title[it.langs[0]][0] %></title>
     <style>
       <%~ E.includeFile('static/reset.css', {}) %>
       <%~ E.includeFile('static/main.css', {}) %>
@@ -14,7 +14,11 @@
     <div class="split-view" style="--panes: <%= it.langs.length %>">
       <% it.langs.forEach((lang, i) => { %>
         <article lang="<%= lang %>" style="--column: <%= i+1 %>">
-          <div class="title-bar"><div><h1>Alice in Wonderland</h1></div></div>
+          <div class="title-bar">
+            <div>
+              <h1<%= it.title[lang][1] ? ` data-alt=${encodeURIComponent(it.title[lang][1])}` : '' %>><%= it.title[lang][0] %></h1>
+            </div>
+          </div>
           <%~ E.includeFile(`../content/${it.path}${lang}.html`, {}) %>
         </article>
       <% }) %>

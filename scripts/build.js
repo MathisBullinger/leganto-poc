@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const eta = require('eta')
+const meta = require('../content/meta.json')
 
 const root = path.resolve(__dirname, '..')
 eta.config.views = path.resolve(root, 'views')
@@ -16,7 +17,10 @@ const permutate = (langs) =>
         ...permutate(langs.filter((v) => v !== lang)).map((v) => [lang, ...v]),
       ])
 
-const stories = fs.readdirSync(content)
+const stories = fs
+  .readdirSync(content)
+  .filter((v) => fs.lstatSync(path.join(content, v)).isDirectory())
+
 stories.forEach(async (id) => {
   const files = fs
     .readdirSync(path.resolve(content, id))
@@ -33,15 +37,22 @@ stories.forEach(async (id) => {
 
   for (const [chapter, langSet] of chapterLangs) {
     for (const langs of permutate(langSet)) {
-      let pre = `${id}/${chapter}`
-      const out = await compile(id, pre, langs)
+      const data = {
+        title: Object.fromEntries(
+          langs.map((lang) => [
+            lang,
+            [meta[id].title.full[lang], meta[id].title.brief?.[lang]].filter(
+              Boolean
+            ),
+          ])
+        ),
+        path: `${id}/${chapter}`,
+        langs,
+      }
+      const out = await eta.renderFile('story.eta', data)
       const dir = path.join(outDir, ...langs, id, chapter.replace(/_$/, ''))
       fs.mkdirSync(dir, { recursive: true })
       fs.writeFileSync(path.join(dir, 'index.html'), out)
     }
   }
 })
-
-async function compile(title, path, langs) {
-  return await eta.renderFile('story.eta', { title, path, langs })
-}

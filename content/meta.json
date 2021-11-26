@@ -1,0 +1,16 @@
+{
+  "alice": {
+    "title": {
+      "full": {
+        "en": "Alice's Adventures in Wonderland",
+        "es": "Las aventuras de Alicia en el país de las maravillas",
+        "de": "Alice's Abenteuer im Wunderland"
+      },
+      "brief": {
+        "en": "Alice in Wonderland",
+        "es": "Alicia en el país de las maravillas",
+        "de": "Alice im Wunderland"
+      }
+    }
+  }
+}

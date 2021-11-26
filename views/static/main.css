@@ -47,7 +47,7 @@ i {
   --gap: 1rem;
   display: grid;
   grid-template-rows: repeat(var(--panes), 1fr);
-  --title-height: 3rem;
+  --title-height: 2.6rem;
 }
 
 .title-bar {
@@ -71,11 +71,16 @@ i {
   align-items: center;
   justify-content: space-around;
   border-bottom: 1px solid var(--cl-text);
+  padding: 0 1rem;
 }
 
 .title-bar h1 {
   font-size: 1rem;
   margin: 0;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @media (orientation: landscape) {
