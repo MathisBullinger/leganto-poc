@@ -14,6 +14,7 @@
     <div class="split-view" style="--panes: <%= it.langs.length %>">
       <% it.langs.forEach((lang, i) => { %>
         <article lang="<%= lang %>" style="--column: <%= i+1 %>">
+          <div class="title-bar"><div><h1>Alice in Wonderland</h1></div></div>
           <%~ E.includeFile(`../content/${it.path}${lang}.html`, {}) %>
         </article>
       <% }) %>

@@ -20,7 +20,7 @@ function compile(file) {
     .split('\n\n\n')
     .map((row) =>
       row.split('\n\n').map((v) => {
-        const tag = v.startsWith('#') ? 'h1' : 'p'
+        const tag = v.startsWith('#') ? 'h2' : 'p'
         return `<${tag}>${v
           .replace(/^#\s*/, '')
           .split('|')
@@ -30,7 +30,7 @@ function compile(file) {
     )
     .map((v) => {
       if (v.length <= 1) return v[0]
-      const tag = v[0].startsWith('<h1') ? 'header' : 'div'
+      const tag = v[0].startsWith('<h') ? 'header' : 'div'
       return `<${tag}>${v.join('')}</${tag}>`
     })
     .map((v, i) => v.replace(/>/, ` style="--row: ${i + 1}">`))

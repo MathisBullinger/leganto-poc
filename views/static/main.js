@@ -1,6 +1,7 @@
 const panes = [...document.querySelectorAll('.split-view > article')]
 
-let lastPos = Array(panes.length).fill(0)
+let lastPos = Array(panes.length).fill((_, i) => panes[i].scrollTop)
+let scrollDir = 1
 const height = new Map(panes.map((v) => [v, v.scrollHeight - v.offsetHeight]))
 
 panes.forEach((el) => {
@@ -17,6 +18,9 @@ function onScroll({ currentTarget: el }) {
       ? el.scrollTop
       : Math.round((el.scrollTop / height.get(el)) * height.get(v))
   )
+  let dir = Math.sign(pos[0] - lastPos[0]) || scrollDir
+  if (dir < 0 !== scrollDir < 0) placeTitleBars(dir > 0)
+  scrollDir = dir
   if (pos.every((v, i) => lastPos[i] === v)) return
   lastPos = pos
 
@@ -39,3 +43,12 @@ split.addEventListener('mouseout', ({ target }) => {
       .querySelectorAll(`[data-seg='${target.dataset.seg}']`)
       .forEach((v) => v.classList.remove('active'))
 })
+
+function placeTitleBars(down) {
+  for (const pane of panes) {
+    const o = down ? ` - var(--title-height)` : ''
+    pane.querySelector(
+      '.title-bar'
+    ).style.bottom = `calc(100% - ${pane.scrollTop}px${o})`
+  }
+}
