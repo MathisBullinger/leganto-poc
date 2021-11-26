@@ -21,6 +21,9 @@
           </div>
           <%~ E.includeFile(`../content/${it.path}${lang}.html`, {}) %>
         </article>
+        <% if (i < it.langs.length - 1) { %>
+          <hr style="--i: <%= i+1 %>"/>
+        <% } %>
       <% }) %>
     </div>
   </body>

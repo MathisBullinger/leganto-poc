@@ -56,9 +56,10 @@ i {
   height: 10000px;
   left: 0;
   bottom: calc(100% - var(--title-height));
+  bottom: 200px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .title-bar > div {
@@ -66,11 +67,11 @@ i {
   height: var(--title-height);
   width: 100%;
   position: sticky;
-  bottom: calc(100% + 1rem);
+  top: calc(-1rem - var(--title-height));
   display: flex;
   align-items: center;
   justify-content: space-around;
-  border-bottom: 1px solid var(--cl-text);
+  border-bottom: 2px solid var(--cl-text);
   padding: 0 1rem;
 }
 
@@ -114,19 +115,49 @@ i {
 
 @media (orientation: portrait) {
   .split-view {
-    padding: 0;
-    grid-gap: 2px 0;
-    background-color: var(--cl-text);
-    height: 100vh;
+    display: contents;
+    --split: 0px;
+    --pane: calc(100vh / var(--panes));
   }
 
-  .split-view > article {
+  article:first-of-type {
+    --clip-t: 0px;
+  }
+
+  article:not(:first-of-type) {
+    --clip-t: calc(var(--split) + var(--offset));
+  }
+
+  article:last-of-type {
+    --clip-b: 0px;
+  }
+
+  article:not(:last-of-type) {
+    --clip-b: calc(100% - var(--pane) - var(--split) - var(--offset));
+  }
+  
+  article {
     padding: 1rem;
-    background-color: #fff;
-    position: relative;
+    position: absolute;
     padding-top: calc(1rem + var(--title-height));
+    
+    --offset: 0px;
+    transform: translateY(calc(var(--pane) * (var(--column) - 1) - var(--offset)));
+    clip-path: inset(var(--clip-t) 0 var(--clip-b) 0);
   }
 
+  hr {
+    width: 100vh;
+    height: 2px;
+    background: var(--cl-text);
+    position: fixed;
+    top: calc(var(--pane) * var(--i));
+    left: 0;
+    margin: 0;
+    z-index: 100;
+    border: none;
+  }
+  
   .align {
     display: none;
   }
