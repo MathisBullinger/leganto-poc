@@ -1,36 +1,10 @@
 const panes = [...document.querySelectorAll('.split-view > article')]
 
-let lastPos = Array(panes.length).fill((_, i) => panes[i].scrollTop)
-let scrollDir = 1
-const height = new Map(panes.map((v) => [v, v.scrollHeight - v.offsetHeight]))
-
 panes.forEach((el) => {
-  el.addEventListener('scroll', onScroll)
-
   el.querySelectorAll('span').forEach((v, i) => {
     v.dataset.seg = i
   })
 })
-
-function onScroll({ currentTarget: el }) {
-  const pos = panes.map((v) =>
-    v === el
-      ? el.scrollTop
-      : Math.round((el.scrollTop / height.get(el)) * height.get(v))
-  )
-  if (pos.every((v, i) => lastPos[i] === v)) return
-
-  const i = panes.indexOf(el)
-  let dir = Math.sign(pos[i] - lastPos[i]) || scrollDir
-  if (dir < 0 !== scrollDir < 0) placeTitleBars(dir > 0)
-  scrollDir = dir
-
-  lastPos = pos
-
-  pos.forEach((top, i) => {
-    if (panes[i] !== el) panes[i].scrollTo({ top, behavior: 'auto' })
-  })
-}
 
 const split = document.querySelector('.split-view')
 split.addEventListener('mouseover', ({ target }) => {
@@ -55,7 +29,7 @@ function placeTitleBars(down) {
     const v = bar.offsetTop + bar.offsetHeight - pane.scrollTop
     if (v > 0 && v <= BAR_HEIGHT) continue
     const o = down ? ` - var(--title-height)` : ''
-    bar.style.bottom = `calc(100% - ${pane.scrollTop}px${o})`
+    bar.style.bottom = `calc(100% - ${window.scrollY}px${o})`
   }
 }
 
@@ -89,3 +63,35 @@ const titleObserver = new ResizeObserver((nodes) => {
 ;[...document.querySelectorAll('.title-bar')]
   .filter((v) => v.querySelector('h1[data-alt]'))
   .forEach((title) => titleObserver.observe(title))
+
+const heights = new Map()
+document
+  .querySelectorAll('article')
+  .forEach((el) => heights.set(el, el.scrollHeight))
+
+const baseHeight = Math.min(...heights.values())
+
+for (const [el, height] of heights) {
+  heights.set(el, height - baseHeight)
+}
+
+let lastPos = window.scrollY
+let scrollDir = 1
+
+window.addEventListener('scroll', onScroll, { passive: true })
+
+function onScroll() {
+  const p =
+    window.scrollY /
+    (document.documentElement.scrollHeight - window.innerHeight)
+
+  for (const [el, height] of heights)
+    if (height) el.style.setProperty('--offset', `${Math.round(p * height)}px`)
+
+  split.style.setProperty('--split', `${window.scrollY}px`)
+
+  let dir = Math.sign(window.scrollY - lastPos) || scrollDir
+  if (dir < 0 !== scrollDir < 0) placeTitleBars(dir > 0)
+  scrollDir = dir
+  lastPos = window.scrollY
+}
