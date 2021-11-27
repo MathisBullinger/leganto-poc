@@ -118,10 +118,6 @@ i {
     margin-top: .8em;
   }
 
-  .back-cover {
-    display: none;
-  }
-
   .title-bar {
     display: none;
   }
@@ -130,34 +126,18 @@ i {
 @media (orientation: portrait) {
   .split-view {
     display: contents;
-    --split: 0px;
     --pane: calc(100vh / var(--panes));
   }
 
   article {
     padding: 1rem;
-    position: absolute;
-    padding-top: calc(1rem + var(--title-height));
-    background-color: #fff;
-    
-    --offset: 0px;
-    transform: translateY(calc(var(--pane) * (var(--column) - 1) - var(--offset)));
-    z-index: calc(100 - 3 * var(--column));
-  }
-
-  .back-cover {
     position: fixed;
-    left: 0;
-    top: calc(var(--i) * var(--pane));
+    padding-top: calc(1rem + var(--title-height));
+    top: calc(var(--pane) * (var(--column) - 1));
     width: 100vw;
     height: var(--pane);
-    background-color: #fff;
-    z-index: calc(100 - 3 * (var(--i) + 1) - 1);
-  }
-  
-  article:not(:last-of-type) {
-    will-change: clip-path;
-    clip-path: inset(0 0 calc(100% - var(--pane) - var(--split) - var(--offset)) 0);
+    overflow-y: hidden;
+    will-change: scroll-position;
   }
 
   hr {
@@ -187,10 +167,11 @@ i {
   header {
     margin-bottom: 1.2rem;
   }
-}
 
-.split-view > article {
-  overflow-y: auto;
+  /*  */
+  .title-bar {
+    display: none;
+  }
 }
 
 [data-seg].active {
@@ -200,4 +181,8 @@ i {
 .char:hover {
   border-right: 1px solid #f00;
   margin-right: -1px;
+}
+
+.content-shadow {
+  visibility: hidden;
 }

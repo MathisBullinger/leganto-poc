@@ -24,7 +24,6 @@ split.addEventListener('mouseout', ({ target }) => {
 const BAR_HEIGHT = 2.6 * 16
 
 function placeTitleBars(down) {
-  console.log('place', down)
   for (const pane of panes) {
     let bar = pane
     while (!bar.className.includes('title-bar')) bar = bar.nextElementSibling
@@ -69,13 +68,7 @@ const titleObserver = new ResizeObserver((nodes) => {
 const heights = new Map()
 document
   .querySelectorAll('article')
-  .forEach((el) => heights.set(el, el.scrollHeight))
-
-const baseHeight = Math.min(...heights.values())
-
-for (const [el, height] of heights) {
-  heights.set(el, height - baseHeight)
-}
+  .forEach((el) => heights.set(el, el.scrollHeight - el.offsetHeight))
 
 let lastPos = window.scrollY
 let scrollDir = 1
@@ -87,13 +80,18 @@ function onScroll() {
     window.scrollY /
     (document.documentElement.scrollHeight - window.innerHeight)
 
-  for (const [el, height] of heights)
-    if (height) el.style.setProperty('--offset', `${Math.round(p * height)}px`)
-
-  split.style.setProperty('--split', `${window.scrollY}px`)
+  for (const [el, height] of heights) {
+    el.scrollTo({ top: p * height, behavior: 'auto' })
+  }
 
   let dir = Math.sign(window.scrollY - lastPos) || scrollDir
   if (dir < 0 !== scrollDir < 0) placeTitleBars(dir > 0)
   scrollDir = dir
   lastPos = window.scrollY
 }
+
+const shadow = document.createElement('div')
+shadow.className = 'content-shadow'
+shadow.setAttribute('aria-hidden', true)
+shadow.innerHTML = document.querySelector('article').innerHTML
+document.querySelector('.split-view').appendChild(shadow)
