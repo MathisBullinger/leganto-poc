@@ -4,10 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= it.title[it.langs[0]][1] || it.title[it.langs[0]][0] %></title>
+    <link rel="manifest" href="/static/manifest.json" />
     <style>
       <%~ E.includeFile('static/reset.css', {}) %>
       <%~ E.includeFile('static/main.css', {}) %>
     </style>
+    <link rel="icon" type="image/svg+xml" href="/static/icons/favicon.svg">
+    <link rel="alternate icon" href="/static/icons/favicon.ico">
+    <link rel="mask-icon" href="/static/icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
   </head>
   <body>
     <div class="split-view" style="--panes: <%= it.langs.length %>">

@@ -1,3 +1,5 @@
+navigator.serviceWorker.register('/sw.js')
+
 const panes = [...document.querySelectorAll('.split-view > article')]
 
 panes.forEach((el) => {

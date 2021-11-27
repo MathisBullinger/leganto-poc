@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "node scripts/compile.js && node scripts/build.js && cp -r views/static build",
+    "build": "node scripts/compile.js && node scripts/build.js && cp -r views/static build && mv build/static/sw.js build",
     "dev": "npm run build && (trap 'kill 0' SIGINT; onchange 'content/**/*.txt' -- node scripts/compile.js & onchange 'content/**/*.html' -- node scripts/build.js & onchange 'views/static/*' -- cp -r views/static build & python3 -m http.server --directory build & node scripts/segmenter.js)"
   },
   "keywords": [],

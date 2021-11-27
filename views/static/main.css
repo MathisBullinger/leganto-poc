@@ -154,6 +154,7 @@ article > div > p, article > div > div > p:first-child {
     --height: 1000px;
     
     transform: translateY(min(calc((var(--anchor) - var(--scroll)) * var(--height)), 0px));
+    will-change: transform;
   }
   
   .align {

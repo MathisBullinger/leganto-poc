@@ -1,0 +1,24 @@
+{
+  "name": "Leganto",
+  "start_url": "/es/en/alice/c1",
+  "display": "standalone",
+  "theme_color": "#000",
+  "background_color": "#fff",
+  "icons": [
+    {
+      "src": "/static/icons/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "128x139"
+    },
+    {
+      "src": "/static/icons/favicon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/static/icons/favicon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
