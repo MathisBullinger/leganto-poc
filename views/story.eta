@@ -14,17 +14,17 @@
     <div class="split-view" style="--panes: <%= it.langs.length %>">
       <% it.langs.forEach((lang, i) => { %>
         <article lang="<%= lang %>" style="--column: <%= i+1 %>">
-          <div class="title-bar">
-            <div>
-              <h1<%= it.title[lang][1] ? ` data-alt=${encodeURIComponent(it.title[lang][1])}` : '' %>><%= it.title[lang][0] %></h1>
-            </div>
-          </div>
           <%~ E.includeFile(`../content/${it.path}${lang}.html`, {}) %>
         </article>
         <% if (i < it.langs.length - 1) { %>
           <hr style="--i: <%= i+1 %>"/>
         <% } %>
         <div class="back-cover" style="--i: <%= i %>"></div>
+        <div class="title-bar" style="--i: <%= i %>">
+          <div>
+            <h1<%= it.title[lang][1] ? ` data-alt=${encodeURIComponent(it.title[lang][1])}` : '' %>><%= it.title[lang][0] %></h1>
+          </div>
+        </div>
       <% }) %>
     </div>
   </body>

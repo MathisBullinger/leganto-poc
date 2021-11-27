@@ -25,8 +25,9 @@ const BAR_HEIGHT = 2.6 * 16
 
 function placeTitleBars(down) {
   for (const pane of panes) {
-    const bar = pane.querySelector('.title-bar')
-    const v = bar.offsetTop + bar.offsetHeight - pane.scrollTop
+    let bar = pane
+    while (!bar.className.includes('title-bar')) bar = bar.nextElementSibling
+    const v = bar.offsetTop + bar.offsetHeight - window.scrollY
     if (v > 0 && v <= BAR_HEIGHT) continue
     const o = down ? ` - var(--title-height)` : ''
     bar.style.bottom = `calc(100% - ${window.scrollY}px${o})`
