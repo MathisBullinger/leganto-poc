@@ -112,6 +112,10 @@ i {
   p ~ p, .split-view > article > div > p:first-of-type {
     margin-top: .8em;
   }
+
+  .back-cover {
+    display: none;
+  }
 }
 
 @media (orientation: portrait) {
@@ -121,30 +125,30 @@ i {
     --pane: calc(100vh / var(--panes));
   }
 
-  article:first-of-type {
-    --clip-t: 0px;
-  }
-
-  article:not(:first-of-type) {
-    --clip-t: calc(var(--split) + var(--offset));
-  }
-
-  article:last-of-type {
-    --clip-b: 0px;
-  }
-
-  article:not(:last-of-type) {
-    --clip-b: calc(100% - var(--pane) - var(--split) - var(--offset));
-  }
-  
   article {
     padding: 1rem;
     position: absolute;
     padding-top: calc(1rem + var(--title-height));
+    background-color: #fff;
     
     --offset: 0px;
     transform: translateY(calc(var(--pane) * (var(--column) - 1) - var(--offset)));
-    clip-path: inset(var(--clip-t) 0 var(--clip-b) 0);
+    z-index: calc(100 - 2 * var(--column));
+  }
+
+  .back-cover {
+    position: fixed;
+    left: 0;
+    top: calc(var(--i) * var(--pane));
+    width: 100vw;
+    height: var(--pane);
+    background-color: #fff;
+    z-index: calc(100 - 2 * (var(--i) + 1) - 1);
+  }
+  
+  article:not(:last-of-type) {
+    will-change: clip-path;
+    clip-path: inset(0 0 calc(100% - var(--pane) - var(--split) - var(--offset)) 0);
   }
 
   hr {

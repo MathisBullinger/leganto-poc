@@ -24,6 +24,7 @@
         <% if (i < it.langs.length - 1) { %>
           <hr style="--i: <%= i+1 %>"/>
         <% } %>
+        <div class="back-cover" style="--i: <%= i %>"></div>
       <% }) %>
     </div>
   </body>
