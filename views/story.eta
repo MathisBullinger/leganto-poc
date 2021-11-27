@@ -14,7 +14,9 @@
     <div class="split-view" style="--panes: <%= it.langs.length %>">
       <% it.langs.forEach((lang, i) => { %>
         <article lang="<%= lang %>" style="--column: <%= i+1 %>">
-          <%~ E.includeFile(`../content/${it.path}${lang}.html`, {}) %>
+          <div>
+            <%~ E.includeFile(`../content/${it.path}${lang}.html`, {}) %>
+          </div>
         </article>
         <% if (i < it.langs.length - 1) { %>
           <hr style="--i: <%= i+1 %>"/>

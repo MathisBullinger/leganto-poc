@@ -65,24 +65,17 @@ const titleObserver = new ResizeObserver((nodes) => {
   .filter((v) => v.querySelector('h1[data-alt]'))
   .forEach((title) => titleObserver.observe(title))
 
-const heights = new Map()
-document
-  .querySelectorAll('article')
-  .forEach((el) => heights.set(el, el.scrollHeight - el.offsetHeight))
-
 let lastPos = window.scrollY
 let scrollDir = 1
 
-window.addEventListener('scroll', onScroll, { passive: true })
+window.addEventListener('scroll', onScroll)
 
 function onScroll() {
-  const p =
+  split.style.setProperty(
+    '--scroll',
     window.scrollY /
-    (document.documentElement.scrollHeight - window.innerHeight)
-
-  for (const [el, height] of heights) {
-    el.scrollTo({ top: p * height, behavior: 'auto' })
-  }
+      (document.documentElement.scrollHeight - window.innerHeight)
+  )
 
   let dir = Math.sign(window.scrollY - lastPos) || scrollDir
   if (dir < 0 !== scrollDir < 0) placeTitleBars(dir > 0)

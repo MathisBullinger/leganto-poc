@@ -127,17 +127,33 @@ i {
   .split-view {
     display: contents;
     --pane: calc(100vh / var(--panes));
+
+    --scroll: 0;
   }
 
   article {
-    padding: 1rem;
     position: fixed;
-    padding-top: calc(1rem + var(--title-height));
     top: calc(var(--pane) * (var(--column) - 1));
     width: 100vw;
     height: var(--pane);
-    overflow-y: hidden;
-    will-change: scroll-position;
+    contain: strict;
+  }
+
+  @supports not (contain: strict) {
+    article {
+      overflow-y: hidden;
+    }
+  }
+
+  article > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+    padding-top: calc(1rem + var(--title-height));
+    will-change: transform;
+    transform: translateY(calc(var(--scroll) * -100% + var(--scroll) * var(--pane)));
   }
 
   hr {
