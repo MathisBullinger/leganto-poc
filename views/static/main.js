@@ -26,12 +26,12 @@ const BAR_HEIGHT = 2.6 * 16
 function placeTitleBars(down) {
   console.log('place', down)
   for (const pane of panes) {
-    const bar = pane.querySelector('.title-bar')
-    const v = bar.offsetTop + bar.offsetHeight - pane.scrollTop
+    let bar = pane
+    while (!bar.className.includes('title-bar')) bar = bar.nextElementSibling
+    const v = bar.offsetTop + bar.offsetHeight - window.scrollY
     if (v > 0 && v <= BAR_HEIGHT) continue
     const o = down ? ` - var(--title-height)` : ''
     bar.style.bottom = `calc(100% - ${window.scrollY}px${o})`
-    console.log(bar.style.bottom)
   }
 }
 
@@ -80,7 +80,9 @@ for (const [el, height] of heights) {
 let lastPos = window.scrollY
 let scrollDir = 1
 
-window.addEventListener('scroll', () => {
+window.addEventListener('scroll', onScroll, { passive: true })
+
+function onScroll() {
   const p =
     window.scrollY /
     (document.documentElement.scrollHeight - window.innerHeight)
@@ -88,12 +90,10 @@ window.addEventListener('scroll', () => {
   for (const [el, height] of heights)
     if (height) el.style.setProperty('--offset', `${Math.round(p * height)}px`)
 
-  document
-    .querySelector('.split-view')
-    .style.setProperty('--split', `${window.scrollY}px`)
+  split.style.setProperty('--split', `${window.scrollY}px`)
 
   let dir = Math.sign(window.scrollY - lastPos) || scrollDir
   if (dir < 0 !== scrollDir < 0) placeTitleBars(dir > 0)
   scrollDir = dir
   lastPos = window.scrollY
-})
+}

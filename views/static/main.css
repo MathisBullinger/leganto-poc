@@ -59,7 +59,9 @@ i {
   bottom: 200px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: flex-end;
+  transform: translateY(calc(var(--i) * var(--pane)));
+  z-index: calc(100 - 3 * (var(--i)) - 1);
 }
 
 .title-bar > div {
@@ -67,12 +69,16 @@ i {
   height: var(--title-height);
   width: 100%;
   position: sticky;
-  top: calc(-1rem - var(--title-height));
   display: flex;
   align-items: center;
   justify-content: space-around;
   border-bottom: 2px solid var(--cl-text);
   padding: 0 1rem;
+  bottom: calc(100% - var(--title-height));
+}
+
+.title-bar:not(:first-of-type) > div {
+  border-top: 2px solid var(--cl-text);
 }
 
 .title-bar h1 {
@@ -111,6 +117,14 @@ i {
   p ~ p, .split-view > article > div > p:first-of-type {
     margin-top: .8em;
   }
+
+  .back-cover {
+    display: none;
+  }
+
+  .title-bar {
+    display: none;
+  }
 }
 
 @media (orientation: portrait) {
@@ -120,30 +134,30 @@ i {
     --pane: calc(100vh / var(--panes));
   }
 
-  article:first-of-type {
-    --clip-t: 0px;
-  }
-
-  article:not(:first-of-type) {
-    --clip-t: calc(var(--split) + var(--offset));
-  }
-
-  article:last-of-type {
-    --clip-b: 0px;
-  }
-
-  article:not(:last-of-type) {
-    --clip-b: calc(100% - var(--pane) - var(--split) - var(--offset));
-  }
-  
   article {
     padding: 1rem;
     position: absolute;
     padding-top: calc(1rem + var(--title-height));
+    background-color: #fff;
     
     --offset: 0px;
     transform: translateY(calc(var(--pane) * (var(--column) - 1) - var(--offset)));
-    clip-path: inset(var(--clip-t) 0 var(--clip-b) 0);
+    z-index: calc(100 - 3 * var(--column));
+  }
+
+  .back-cover {
+    position: fixed;
+    left: 0;
+    top: calc(var(--i) * var(--pane));
+    width: 100vw;
+    height: var(--pane);
+    background-color: #fff;
+    z-index: calc(100 - 3 * (var(--i) + 1) - 1);
+  }
+  
+  article:not(:last-of-type) {
+    will-change: clip-path;
+    clip-path: inset(0 0 calc(100% - var(--pane) - var(--split) - var(--offset)) 0);
   }
 
   hr {
