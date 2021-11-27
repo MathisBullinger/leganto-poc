@@ -22,15 +22,20 @@ split.addEventListener('mouseout', ({ target }) => {
 })
 
 const BAR_HEIGHT = 2.6 * 16
+const titleBars = [...document.querySelectorAll('.title-bar')]
+const scrollHeights = new Map()
 
-function placeTitleBars(down) {
-  for (const pane of panes) {
-    let bar = pane
-    while (!bar.className.includes('title-bar')) bar = bar.nextElementSibling
-    const v = bar.offsetTop + bar.offsetHeight - window.scrollY
-    if (v > 0 && v <= BAR_HEIGHT) continue
-    const o = down ? ` - var(--title-height)` : ''
-    bar.style.bottom = `calc(100% - ${window.scrollY}px${o})`
+titleBars.forEach((v) => {
+  scrollHeights.set(v, v.parentElement.scrollHeight)
+  v.style.setProperty('--height', `${scrollHeights.get(v)}px`)
+})
+
+function placeTitleBars(down, pos) {
+  for (const bar of titleBars) {
+    bar.style.setProperty(
+      '--anchor',
+      down ? pos : pos - BAR_HEIGHT / scrollHeights.get(bar)
+    )
   }
 }
 
@@ -61,7 +66,7 @@ const titleObserver = new ResizeObserver((nodes) => {
     }
   }
 })
-;[...document.querySelectorAll('.title-bar')]
+titleBars
   .filter((v) => v.querySelector('h1[data-alt]'))
   .forEach((title) => titleObserver.observe(title))
 
@@ -71,20 +76,21 @@ let scrollDir = 1
 window.addEventListener('scroll', onScroll)
 
 function onScroll() {
-  split.style.setProperty(
-    '--scroll',
-    window.scrollY /
-      (document.documentElement.scrollHeight - window.innerHeight)
-  )
+  const sh = document.documentElement.scrollHeight - window.innerHeight
+  const y = Math.min(Math.max(window.scrollY, 0), sh)
 
-  let dir = Math.sign(window.scrollY - lastPos) || scrollDir
-  if (dir < 0 !== scrollDir < 0) placeTitleBars(dir > 0)
+  const p = y / sh
+
+  split.style.setProperty('--scroll', p)
+
+  let dir = Math.sign(y - lastPos) || scrollDir
+  if (dir < 0 !== scrollDir < 0) placeTitleBars(dir > 0, p)
   scrollDir = dir
-  lastPos = window.scrollY
+  lastPos = y
 }
 
 const shadow = document.createElement('div')
 shadow.className = 'content-shadow'
 shadow.setAttribute('aria-hidden', true)
-shadow.innerHTML = document.querySelector('article').innerHTML
+shadow.innerHTML = document.querySelector('.content').innerHTML
 document.querySelector('.split-view').appendChild(shadow)
