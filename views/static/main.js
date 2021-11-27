@@ -1,8 +1,6 @@
 navigator.serviceWorker.register('/sw.js')
 
-const panes = [...document.querySelectorAll('.split-view > article')]
-
-panes.forEach((el) => {
+document.querySelectorAll('.content').forEach((el) => {
   el.querySelectorAll('span').forEach((v, i) => {
     v.dataset.seg = i
   })
@@ -22,24 +20,6 @@ split.addEventListener('mouseout', ({ target }) => {
       .querySelectorAll(`[data-seg='${target.dataset.seg}']`)
       .forEach((v) => v.classList.remove('active'))
 })
-
-const BAR_HEIGHT = 2.6 * 16
-const titleBars = [...document.querySelectorAll('.title-bar')]
-const scrollHeights = new Map()
-
-titleBars.forEach((v) => {
-  scrollHeights.set(v, v.parentElement.scrollHeight)
-  v.style.setProperty('--height', `${scrollHeights.get(v)}px`)
-})
-
-function placeTitleBars(down, pos) {
-  for (const bar of titleBars) {
-    bar.style.setProperty(
-      '--anchor',
-      down ? pos : pos - BAR_HEIGHT / scrollHeights.get(bar)
-    )
-  }
-}
 
 const overflows = {}
 
@@ -68,27 +48,29 @@ const titleObserver = new ResizeObserver((nodes) => {
     }
   }
 })
-titleBars
+
+;[...document.querySelectorAll('.title-bar')]
   .filter((v) => v.querySelector('h1[data-alt]'))
   .forEach((title) => titleObserver.observe(title))
 
-let lastPos = window.scrollY
-let scrollDir = 1
+const panes = [...document.querySelectorAll('.content')]
+const scrollHeights = new Map(
+  panes.map((pane) => [
+    pane,
+    pane.offsetHeight - window.innerHeight / panes.length,
+  ])
+)
 
 window.addEventListener('scroll', onScroll)
 
 function onScroll() {
   const sh = document.documentElement.scrollHeight - window.innerHeight
   const y = Math.min(Math.max(window.scrollY, 0), sh)
-
   const p = y / sh
 
-  split.style.setProperty('--scroll', p)
-
-  let dir = Math.sign(y - lastPos) || scrollDir
-  if (dir < 0 !== scrollDir < 0) placeTitleBars(dir > 0, p)
-  scrollDir = dir
-  lastPos = y
+  for (const pane of panes) {
+    pane.style.transform = `translateY(${-p * scrollHeights.get(pane)}px)`
+  }
 }
 
 const shadow = document.createElement('div')
